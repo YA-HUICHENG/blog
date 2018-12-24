@@ -13,6 +13,8 @@ def article(request):
         articles.update({article:Comment.objects.filter(article=article)})
     context = {'articles':articles}
     return render(request, 'article/article.html', context)
+
+
 def articleCreate(request):
     '''
     Create a new article instance
@@ -22,4 +24,16 @@ def articleCreate(request):
     '''
     template = 'article/articleCreate.html'
     if request.method == 'GET':
+        print(ArticleForm())
         return render(request, template, {'articleForm':ArticleForm()})
+    
+    # POST
+    articleForm = ArticleForm(request.POST)
+    if not articleForm.is_valid():
+        return render(request, template, {'articleForm':articleForm})
+
+    print(articleForm)
+    articleForm.save()
+    # articleForm.save()
+    return article(request)
+    
